@@ -9,33 +9,28 @@ const Singlerecipe = () => {
     const { recipe, setrecipe } = useContext(recipecontext);
     const params = useParams();
     const findrecipe = recipe.find((findrecipe) => params.id == findrecipe.id);
-    console.log(findrecipe);
 
     const { register, handleSubmit, reset } = useForm({
         defaultValues:
         {
-            title: findrecipe.title,
-            image: findrecipe.image,
-            chef: findrecipe.chef,
-            desc: findrecipe.desc,
-            ingredients: Array.isArray(findrecipe.ingredients) ? findrecipe.ingredients.join('\n') : findrecipe.ingredients,
-            instructions: Array.isArray(findrecipe.instructions) ? findrecipe.instructions.join('\n') : findrecipe.instructions,
+            title: findrecipe?.title,
+            category:findrecipe?.category,
+            image: findrecipe?.image,
+            chef: findrecipe?.chef, 
+            desc: findrecipe?.desc,
+            ingredients: findrecipe?.ingredients,
+            instructions: findrecipe?.instructions,
 
         }
     });
     // Dummy submit handler
-    const onSubmit = (data) => {
+    const onUpdate = (data) => {
         const recipeindex = recipe.findIndex((data) => params.id == data.id);
 
-        const updatedData = {
-            ...data,
-            ingredients: data.ingredients.split('\n').map(i => i.trim()).filter(Boolean),
-            instructions: data.instructions.split('\n').map(i => i.trim()).filter(Boolean),
-        };
-
         const copydata = [...recipe];
-        copydata[recipeindex] = { ...copydata[recipeindex], ...updatedData }
+        copydata[recipeindex] = { ...copydata[recipeindex], ...data}
         setrecipe(copydata)
+        localStorage.setItem("recipes", JSON.stringify(copydata));
         toast.success("Recipe updated!");
 
     }
@@ -43,6 +38,7 @@ const Singlerecipe = () => {
     const Deletehandler = () => {
         const filterdata = recipe.filter((r) => r.id != params.id);
         setrecipe(filterdata);
+        localStorage.setItem("recipes", JSON.stringify(filterdata));
         navigate("/Recipes")
     }
 
@@ -86,7 +82,7 @@ const Singlerecipe = () => {
                 </div>
             </div>
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onUpdate)}
                 className="w-1/2 max-w-lg bg-zinc-800 rounded-2xl shadow-lg p-10 space-y-6"
             >
                 <h2 className="text-3xl font-bold text-center mb-6 text-amber-300">Create Recipe</h2>
@@ -123,7 +119,7 @@ const Singlerecipe = () => {
                 <div>
                     <select
                         className="w-full bg-zinc-700 text-white border-b-2 border-amber-300 focus:border-amber-400 outline-none p-3 rounded-t-md transition"
-                        {...register("categories")}
+                        {...register("category")}
                     // value={findrecipe.category}
                     >
                         <option className="text-black" value="">Select Category</option>

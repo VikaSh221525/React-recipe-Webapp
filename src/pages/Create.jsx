@@ -14,7 +14,11 @@ const Create = () => {
     const onSubmit = data => {
         data.id = nanoid();
 
-        setrecipe([...recipe, data]);
+        const createdata  = [...recipe];
+        createdata.push(data);
+        setrecipe(createdata);
+        // setrecipe([...recipe, data]);
+        localStorage.setItem("recipes", JSON.stringify(createdata));
         toast.success("New recipe created!")
 
         reset();
@@ -58,7 +62,7 @@ const Create = () => {
                 <div>
                     <select
                         className="w-full bg-zinc-700 text-white border-b-2 border-amber-300 focus:border-amber-400 outline-none p-3 rounded-t-md transition"
-                        {...register("categories")}
+                        {...register("category")}
                     >
                         <option className="text-black" value="">Select Category</option>
                         <option className="text-black" value="Vegetarian">Vegetarian</option>
