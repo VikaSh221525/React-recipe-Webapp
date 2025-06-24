@@ -12,7 +12,7 @@ const Recipes = () => {
 
     return (
         <div className="h-screen grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {recipe.length > 0 ? renderrecipes : "No recipes"}
+            {recipe.length > 0 ? renderrecipes : <h1 className='text-7xl text-red-500'>No Recipes Found!</h1> }
         </div>
     )
 }
